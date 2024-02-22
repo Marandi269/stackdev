@@ -1,0 +1,44 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  memcached:
+    image: memcached:latest
+    container_name: memcached
+    ports:
+      - "11211:11211"
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq_container
+    environment:
+      RABBITMQ_DEFAULT_USER: openstack
+      RABBITMQ_DEFAULT_PASS: RABBIT_PASS
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  keystone:
+    image: marandi/keystone:v1
+    ports:
+      - 5000:5000
+    depends_on:
+      - mysql
+    volumes:
+      - /etc/keystone/fernet-keys/:/etc/keystone/fernet-keys/
+
+volumes:
+  mysql_data:
+  rabbitmq_data:
+
