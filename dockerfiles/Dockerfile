@@ -2,8 +2,7 @@ FROM python:3.10
 
 COPY keystone/requirements.txt  /keystone/
 RUN pip install -r /keystone/requirements.txt -i https://mirrors.cloud.tencent.com/pypi/simple
-RUN pip install pymysql -i https://mirrors.cloud.tencent.com/pypi/simple
-RUN pip install uwsgi -i https://mirrors.cloud.tencent.com/pypi/simple
+RUN pip install uwsgi pymysql -i https://mirrors.cloud.tencent.com/pypi/simple
 COPY keystone/ /keystone/
 COPY dockerfiles/keystone.conf /etc/keystone/keystone.conf
 RUN mkdir /var/log/keystone/
