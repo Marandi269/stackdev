@@ -1,0 +1,12 @@
+FROM python:3.10
+
+COPY glance/requirements.txt  /glance/
+RUN pip install -r /glance/requirements.txt -i https://mirrors.cloud.tencent.com/pypi/simple
+RUN pip install pymysql python-memcached -i https://mirrors.cloud.tencent.com/pypi/simple
+COPY glance/ /glance/
+COPY dockerfiles/glance/ /etc/glance/
+WORKDIR /glance
+RUN python /glance/setup.py install
+RUN mkdir -p /tmp/staging/
+
+CMD /usr/local/bin/glance-api --config-file=/etc/glance/glance-api.conf --config-dir=/etc/glance/

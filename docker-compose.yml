@@ -38,6 +38,15 @@ services:
     volumes:
       - /etc/keystone/fernet-keys/:/etc/keystone/fernet-keys/
 
+  glance:
+    image: marandi/glance:v1
+    ports:
+      - "9292:9292"
+    depends_on:
+      - keystone
+    volumes:
+      - /var/lib/glance/images/:/var/lib/glance/images/
+
 volumes:
   mysql_data:
   rabbitmq_data:
