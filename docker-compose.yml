@@ -10,12 +10,16 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      stack:
 
   memcached:
     image: memcached:latest
     container_name: memcached
     ports:
       - "11211:11211"
+    networks:
+      stack:
 
   rabbitmq:
     image: rabbitmq:management
@@ -28,11 +32,19 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      stack:
 
   keystone:
     image: marandi/keystone:v1
     ports:
       - "5000:5000"
+    networks:
+      stack:
+        aliases:
+          - controller
+#         - keystone
+
     depends_on:
       - mysql
     volumes:
@@ -44,6 +56,8 @@ services:
       - "9292:9292"
     depends_on:
       - keystone
+    networks:
+      stack:
     volumes:
       - /var/lib/glance/images/:/var/lib/glance/images/
 
@@ -51,3 +65,7 @@ volumes:
   mysql_data:
   rabbitmq_data:
 
+
+networks:
+  stack:
+    driver: bridge
